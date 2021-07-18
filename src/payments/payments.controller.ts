@@ -32,6 +32,7 @@ export class PaymentsController {
   }
 
   @Post('verify')
+  @UsePipes(ValidationPipe)
   async verifyPayment(@Query() transactionInfo: VerifyPaymentDto) {
     const { data } = await this.paymentsService.verifyPayment(transactionInfo);
     return data;
