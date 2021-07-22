@@ -7,6 +7,7 @@ import { PaymentsController } from './payments.controller';
 @Module({
   imports: [
     HttpModule,
+    // Added caching support
     CacheModule.register({
       ttl: 10, // seconds
       max: 20, // maximum number of items in cache
