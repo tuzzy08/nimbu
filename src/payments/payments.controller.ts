@@ -15,6 +15,7 @@ import { CreatePaymentDto } from './dtos/create-payment.dto';
 import { UpdatePaymentDto } from './dtos/update-payment.dto';
 import { MakePaymentDto } from './dtos/make-payment.dto';
 import { VerifyPaymentDto } from './dtos/verify-payments.dto';
+import { ApiResponseFormat } from 'src/shared/api-response.dto';
 
 @Controller('/api/v1/payments')
 export class PaymentsController {
@@ -24,7 +25,6 @@ export class PaymentsController {
   @UsePipes(ValidationPipe)
   async makePayment(@Body() data: MakePaymentDto): Promise<string> {
     const response = await this.paymentsService.makePayment(data);
-    console.log(response);
     const {
       data: { link },
     } = response;
@@ -33,9 +33,13 @@ export class PaymentsController {
 
   @Post('verify')
   @UsePipes(ValidationPipe)
-  async verifyPayment(@Query() transactionInfo: VerifyPaymentDto) {
-    const { data } = await this.paymentsService.verifyPayment(transactionInfo);
-    return data;
+  async verifyPayment(
+    @Query() transactionInfo: VerifyPaymentDto,
+  ): Promise<ApiResponseFormat> {
+    const res = await this.paymentsService.verifyPayment(transactionInfo);
+    console.log(res);
+    return res;
+    // return await this.paymentsService.verifyPayment(transactionInfo);
   }
 
   @Post()

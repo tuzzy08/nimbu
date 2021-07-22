@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
 
 interface Customer {
   email: string;
@@ -8,8 +8,8 @@ interface Customer {
 
 export class MakePaymentDto {
   @IsNotEmpty()
-  @IsString()
-  amount: string;
+  @IsNumber()
+  amount: number;
 
   @IsNotEmpty()
   @IsString()
