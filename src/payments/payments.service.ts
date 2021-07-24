@@ -1,12 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import { Model } from 'mongoose';
+import { CACHE_MANAGER } from '@nestjs/common';
+import { Cache } from 'cache-manager';
+import { InjectModel } from '@nestjs/mongoose';
 import { CreatePaymentDto } from './dtos/create-payment.dto';
 import { MakePaymentDto } from './dtos/make-payment.dto';
 import { UpdatePaymentDto } from './dtos/update-payment.dto';
 import { VerifyPaymentDto } from './dtos/verify-payments.dto';
-import { CACHE_MANAGER } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import { Payment, PaymentDocument } from './schemas/payment-schema';
 
 @Injectable()
 export class PaymentsService {
@@ -17,6 +20,8 @@ export class PaymentsService {
     },
   };
   constructor(
+    @InjectModel(Payment.name)
+    private readonly paymentModel: Model<PaymentDocument>,
     private httpService: HttpService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
@@ -25,7 +30,7 @@ export class PaymentsService {
     const url = `${process.env.FLUTTER_API_BASE_URL}/v3/payments`;
     const { amount } = paymentInfo;
     const customerInfo = {
-      tx_ref: 'hooli-tx-1920bbtytty',
+      tx_ref: 'nimbu-tx-001bbtytty',
       currency: 'NGN',
       redirect_url: 'http//localhost:4000/api/v1/verify',
       ...paymentInfo,

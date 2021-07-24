@@ -17,10 +17,10 @@ import { UpdateDispatchDto } from './dto/update-dispatch.dto';
 export class DispatchController {
   constructor(private readonly dispatchService: DispatchService) {}
 
-  @Post()
+  @Post('createDispatch')
   @UsePipes(ValidationPipe)
-  create(@Body() data: CreateDispatchDto) {
-    return this.dispatchService.create(data);
+  async create(@Body() data: CreateDispatchDto) {
+    return await this.dispatchService.create(data);
   }
 
   @Get()

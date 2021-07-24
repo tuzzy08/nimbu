@@ -6,10 +6,13 @@ export class CreateDispatchDto {
   senderFullName: string;
 
   @IsNotEmpty()
-  senderMobile: string;
+  senderPhone: string;
 
   @IsNotEmpty()
-  pickUpAddress: string;
+  pickupAddress: string;
+
+  @IsNotEmpty()
+  item: string;
 
   @IsNotEmpty()
   itemDescription: string;
@@ -18,17 +21,16 @@ export class CreateDispatchDto {
   receiverFullName: string;
 
   @IsNotEmpty()
-  receiverMobile: string;
+  receiverPhone: string;
 
   @IsNotEmpty()
   dropoffLocation: string;
 
   @IsNotEmpty()
+  receiverAddress: string;
+  @IsNotEmpty()
   deliveryCharge: number;
 
   @IsNotEmpty()
-  paymentType: string;
-
-  @IsNotEmpty()
-  deliveryStatus: string;
+  paymentOption: string;
 }
