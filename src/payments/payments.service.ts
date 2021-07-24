@@ -27,11 +27,10 @@ export class PaymentsService {
   ) {}
 
   async makePayment(paymentInfo: MakePaymentDto): Promise<any> {
-    console.log(paymentInfo);
     const url = `${process.env.FLUTTER_API_BASE_URL}/v3/payments`;
     const { amount } = paymentInfo;
     const customerInfo = {
-      tx_ref: 'hooli-tx-1920bbtytty',
+      tx_ref: 'nimbu-tx-001bbtytty',
       currency: 'NGN',
       redirect_url: 'http//localhost:4000/api/v1/verify',
       ...paymentInfo,

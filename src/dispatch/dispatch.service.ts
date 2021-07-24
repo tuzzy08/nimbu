@@ -1,10 +1,12 @@
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CreateDispatchDto } from './dto/create-dispatch.dto';
 import { UpdateDispatchDto } from './dto/update-dispatch.dto';
 import { Dispatch, DispatchDocument } from './schema/dispatch.schema';
 import { PaymentsService } from 'src/payments/payments.service';
+import { DispatchCreatedEvent } from './events/dispatch-created.event';
 
 @Injectable()
 export class DispatchService {
@@ -12,12 +14,13 @@ export class DispatchService {
     @InjectModel(Dispatch.name)
     private readonly dispatchModel: Model<DispatchDocument>,
     private readonly paymentsService: PaymentsService,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   async create(data: CreateDispatchDto): Promise<any> {
     const newDispatch = new this.dispatchModel(data);
     const result = await newDispatch.save();
-    // console.log(result);
+    this.eventEmitter.emit('dispatch.created', result);
     if (result && result.paymentOption === 'card') {
       const paymentData = {
         amount: result.deliveryCharge,
