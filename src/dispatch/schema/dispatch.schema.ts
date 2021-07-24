@@ -6,6 +6,19 @@ import { randomInt } from 'crypto';
 
 export type DispatchDocument = Dispatch & Document;
 
+enum PaymentStatus {
+  paid = 'PAID',
+  pending = 'PENDING',
+  cancelled = 'CANCELLED',
+}
+
+enum deliveryStatus {
+  delivered = 'DELIVERED',
+  pending = 'PENDING',
+  processing = 'PROCESSING',
+  cancelled = 'CANCELLED',
+}
+
 @Schema()
 export class Dispatch {
   @Factory((faker) => faker.name.findName())
@@ -52,7 +65,7 @@ export class Dispatch {
   dispatchRider: string;
 
   @Factory('Processing')
-  @Prop({ required: true, default: 'Processing' })
+  @Prop({ required: true, default: deliveryStatus.processing })
   deliveryStatus: string;
 
   @Factory((faker) => faker.date.past())
@@ -60,7 +73,7 @@ export class Dispatch {
   createdAt: Date;
 
   @Factory(true)
-  @Prop({ required: true, default: 'PENDING' })
+  @Prop({ required: true, default: PaymentStatus.pending })
   paymentStatus: string;
 }
 
