@@ -1,15 +1,18 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateDispatchDto {
+class Customer {
   @IsNotEmpty()
   @IsString()
   senderFullName: string;
 
   @IsNotEmpty()
-  senderMobile: string;
+  senderPhone: string;
 
   @IsNotEmpty()
-  pickUpAddress: string;
+  pickupAddress: string;
+
+  @IsNotEmpty()
+  item: string;
 
   @IsNotEmpty()
   itemDescription: string;
@@ -18,20 +21,22 @@ export class CreateDispatchDto {
   receiverFullName: string;
 
   @IsNotEmpty()
-  receiverMobile: string;
+  receiverPhone: string;
 
   @IsNotEmpty()
   dropoffLocation?: string;
 
   @IsNotEmpty()
   receiverAddress: string;
+}
+
+export class CreateDispatchDto {
+  @IsNotEmpty()
+  deliveryCharge: number;
 
   @IsNotEmpty()
-  deliveryCharge?: number;
+  paymentOption: string;
 
   @IsNotEmpty()
-  paymentType?: string;
-
-  @IsNotEmpty()
-  deliveryStatus?: string;
+  customer: Customer;
 }

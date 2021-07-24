@@ -17,7 +17,7 @@ import { UpdateDispatchDto } from './dto/update-dispatch.dto';
 export class DispatchController {
   constructor(private readonly dispatchService: DispatchService) {}
 
-  @Post()
+  @Post('createDispatch')
   @UsePipes(ValidationPipe)
   create(@Body() data: CreateDispatchDto) {
     console.log(data);
