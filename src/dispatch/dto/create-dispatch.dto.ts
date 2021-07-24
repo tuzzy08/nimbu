@@ -21,14 +21,17 @@ export class CreateDispatchDto {
   receiverMobile: string;
 
   @IsNotEmpty()
-  dropoffLocation: string;
+  dropoffLocation?: string;
 
   @IsNotEmpty()
-  deliveryCharge: number;
+  receiverAddress: string;
 
   @IsNotEmpty()
-  paymentType: string;
+  deliveryCharge?: number;
 
   @IsNotEmpty()
-  deliveryStatus: string;
+  paymentType?: string;
+
+  @IsNotEmpty()
+  deliveryStatus?: string;
 }

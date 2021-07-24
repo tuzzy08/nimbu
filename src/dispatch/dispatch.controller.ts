@@ -20,7 +20,8 @@ export class DispatchController {
   @Post()
   @UsePipes(ValidationPipe)
   create(@Body() data: CreateDispatchDto) {
-    return this.dispatchService.create(data);
+    console.log(data);
+    // return this.dispatchService.create(data);
   }
 
   @Get()

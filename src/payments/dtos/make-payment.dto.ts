@@ -2,8 +2,8 @@ import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
 
 interface Customer {
   email: string;
-  phonenumber: string;
-  name: string;
+  phoneNumber: string;
+  fullName: string;
 }
 
 export class MakePaymentDto {
