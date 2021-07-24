@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-class Customer {
+export class CreateDispatchDto {
   @IsNotEmpty()
   @IsString()
   senderFullName: string;
@@ -24,19 +24,13 @@ class Customer {
   receiverPhone: string;
 
   @IsNotEmpty()
-  dropoffLocation?: string;
+  dropoffLocation: string;
 
   @IsNotEmpty()
   receiverAddress: string;
-}
-
-export class CreateDispatchDto {
   @IsNotEmpty()
   deliveryCharge: number;
 
   @IsNotEmpty()
   paymentOption: string;
-
-  @IsNotEmpty()
-  customer: Customer;
 }

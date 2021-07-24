@@ -27,6 +27,7 @@ export class PaymentsService {
   ) {}
 
   async makePayment(paymentInfo: MakePaymentDto): Promise<any> {
+    console.log(paymentInfo);
     const url = `${process.env.FLUTTER_API_BASE_URL}/v3/payments`;
     const { amount } = paymentInfo;
     const customerInfo = {

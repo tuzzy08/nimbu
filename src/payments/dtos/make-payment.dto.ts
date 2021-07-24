@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
 
 interface Customer {
-  email: string;
+  email?: string;
   phoneNumber: string;
   fullName: string;
 }

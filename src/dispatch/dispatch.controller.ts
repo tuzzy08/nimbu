@@ -19,9 +19,8 @@ export class DispatchController {
 
   @Post('createDispatch')
   @UsePipes(ValidationPipe)
-  create(@Body() data: CreateDispatchDto) {
-    console.log(data);
-    // return this.dispatchService.create(data);
+  async create(@Body() data: CreateDispatchDto) {
+    return await this.dispatchService.create(data);
   }
 
   @Get()

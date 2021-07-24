@@ -14,11 +14,15 @@ export class Dispatch {
 
   @Factory((faker) => faker.phone.phoneNumber())
   @Prop({ required: true })
-  senderMobile: string;
+  senderPhone: string;
 
   @Factory((faker) => faker.address.streetAddress())
   @Prop({ required: true })
-  pickUpAddress: string;
+  pickupAddress: string;
+
+  @Factory((faker) => faker.lorem.words(5))
+  @Prop({ required: true })
+  item: string;
 
   @Factory((faker) => faker.lorem.words(5))
   @Prop({ required: true })
@@ -30,18 +34,18 @@ export class Dispatch {
 
   @Factory((faker) => faker.phone.phoneNumber())
   @Prop({ required: true })
-  receiverMobile: string;
+  receiverPhone: string;
 
   @Factory((faker) => faker.address.streetAddress())
-  @Prop()
+  @Prop({ required: true, default: '' })
   dropoffLocation: string;
 
-  @Factory((faker) => randomInt(500, 2000))
+  @Factory(() => randomInt(500, 2000))
   @Prop({ required: true })
   deliveryCharge: number;
 
   @Prop({ required: true, default: 'Card' })
-  paymentType: string;
+  paymentOption: string;
 
   @Factory((faker) => faker.name.findName())
   @Prop({ required: true, default: 'Unassigned' })
@@ -56,7 +60,7 @@ export class Dispatch {
   createdAt: Date;
 
   @Factory(true)
-  @Prop({ required: true, default: 'PAID' })
+  @Prop({ required: true, default: 'PENDING' })
   paymentStatus: string;
 }
 
