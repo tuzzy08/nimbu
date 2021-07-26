@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { PaymentsService } from './payments.service';
 import { PaymentsController } from './payments.controller';
 import { Payment, PaymentSchema } from './schemas/payment-schema';
+import { PaymentMadeEventListener } from './listeners/payment-made.listener';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { Payment, PaymentSchema } from './schemas/payment-schema';
     ]),
   ],
   controllers: [PaymentsController],
-  providers: [PaymentsService],
+  providers: [PaymentsService, PaymentMadeEventListener],
   exports: [PaymentsService],
 })
 export class PaymentsModule {}

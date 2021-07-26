@@ -15,5 +15,6 @@ import { DispatchCreatedEventListener } from './listeners/dispatch-created.liste
   ],
   controllers: [DispatchController],
   providers: [DispatchService, DispatchCreatedEventListener],
+  exports: [DispatchService],
 })
 export class DispatchModule {}
