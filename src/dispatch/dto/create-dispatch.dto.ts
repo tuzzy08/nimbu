@@ -3,6 +3,10 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateDispatchDto {
   @IsNotEmpty()
   @IsString()
+  tx_ref;
+
+  @IsNotEmpty()
+  @IsString()
   senderFullName: string;
 
   @IsNotEmpty()
