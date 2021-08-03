@@ -1,4 +1,6 @@
-  <p align="center">NIMBU.NG</p>
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=tuzzy08_nimbu&metric=alert_status)](https://sonarcloud.io/dashboard?id=tuzzy08_nimbu)
+
+<p align="center">NIMBU.NG</p>
 
 ## Description
 
