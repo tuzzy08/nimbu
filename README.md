@@ -1,4 +1,4 @@
-  <p align="center">NIMBU.NG.</p>
+  <p align="center">NIMBU.NG</p>
 
 ## Description
 

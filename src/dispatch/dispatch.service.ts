@@ -25,12 +25,13 @@ export class DispatchService {
       email: result.email,
       amount: result.deliveryCharge,
     };
-    // this.eventEmitter.emit('dispatch.created', eventData);
+    this.eventEmitter.emit('dispatch.created', payStackData);
     if (result.paymentOption === 'payOnDelivery') {
       return;
     }
     try {
-      return this.paymentsService.payWithPaystack(payStackData);
+      const response = await this.paymentsService.payWithPaystack(payStackData);
+      return response;
     } catch (error) {
       console.log(error);
     }
