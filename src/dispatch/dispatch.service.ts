@@ -30,7 +30,7 @@ export class DispatchService {
       return;
     }
     try {
-      const response = this.paymentsService.payWithPaystack(payStackData);
+      const response = await this.paymentsService.payWithPaystack(payStackData);
       return response;
     } catch (error) {
       console.log(error);
