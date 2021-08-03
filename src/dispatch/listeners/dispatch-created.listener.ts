@@ -9,5 +9,6 @@ export class DispatchCreatedEventListener {
   @OnEvent('dispatch.created')
   async handleDispatchCreatedEvent(data: DispatchCreatedEvent) {
     // TODO: Handle event
+    console.log(data);
   }
 }

@@ -25,7 +25,7 @@ export class DispatchService {
       email: result.email,
       amount: result.deliveryCharge,
     };
-    // this.eventEmitter.emit('dispatch.created', eventData);
+    this.eventEmitter.emit('dispatch.created', payStackData);
     if (result.paymentOption === 'payOnDelivery') {
       return;
     }
