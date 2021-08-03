@@ -12,6 +12,10 @@ export class MakePaymentDto {
   amount: number;
 
   @IsNotEmpty()
+  @IsNumber()
+  tx_ref;
+
+  @IsNotEmpty()
   @IsString()
   payment_options: string;
 

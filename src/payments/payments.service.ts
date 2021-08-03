@@ -1,23 +1,24 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, CACHE_MANAGER } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
-import { CACHE_MANAGER } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { InjectModel } from '@nestjs/mongoose';
+import { v4 as uuidv4 } from 'uuid';
 import { CreatePaymentDto } from './dtos/create-payment.dto';
 import { MakePaymentDto } from './dtos/make-payment.dto';
 import { UpdatePaymentDto } from './dtos/update-payment.dto';
 import { VerifyPaymentDto } from './dtos/verify-payments.dto';
 import { Payment, PaymentDocument } from './schemas/payment-schema';
+import { PayWithPaystackDto } from './dtos/pay-with-paystack.dto';
 
 @Injectable()
 export class PaymentsService {
   config = {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.FLUTTER_API_KEY}`,
+      Authorization: `Bearer ${process.env.PAYSTACK_API_TEST_SECRET_KEY}`,
     },
   };
   constructor(
@@ -28,11 +29,32 @@ export class PaymentsService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
+  async payWithPaystack(paymentInfo: PayWithPaystackDto): Promise<any> {
+    const url = `${process.env.PAYSTACK_API_BASE_URL}/transaction/initialize`;
+    const id = uuidv4();
+    const transactionInfo = {
+      currency: 'NGN',
+      reference: `nimbu-${id}`,
+      channels: ['card', 'bank', 'ussd', 'qr', 'bank_transfer'],
+      ...paymentInfo,
+    };
+    try {
+      const response = await firstValueFrom(
+        this.httpService.post(url, transactionInfo, this.config),
+      );
+      if (response) {
+        console.log(response.data);
+        return response.data;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async makePayment(paymentInfo: MakePaymentDto): Promise<any> {
     const url = `${process.env.FLUTTER_API_BASE_URL}/v3/payments`;
-    const { amount } = paymentInfo;
+    const { amount, tx_ref } = paymentInfo;
     const customerInfo = {
-      tx_ref: 'nimbu-tx-001',
       currency: 'NGN',
       redirect_url: 'http//localhost:4000/api/v1/verify',
       ...paymentInfo,
@@ -43,7 +65,7 @@ export class PaymentsService {
       },
     };
     // Set transaction amount in cache
-    await this.cacheManager.set(customerInfo.tx_ref, amount);
+    await this.cacheManager.set(tx_ref, amount);
     // Make 'Post' request to flutterwave endpoint to make payment
     const { data } = await firstValueFrom(
       this.httpService.post(url, customerInfo, this.config),
@@ -77,7 +99,7 @@ export class PaymentsService {
       cached_tx_amount !== response_amount ||
       currency !== 'NGN'
     ) {
-      this.eventEmitter.emit('dispatch.created', {
+      this.eventEmitter.emit('payment.made', {
         tx_ref: response_tx_ref,
         response_amount,
         currency,
