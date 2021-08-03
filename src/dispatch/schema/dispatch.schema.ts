@@ -22,8 +22,16 @@ enum deliveryStatus {
 @Schema()
 export class Dispatch {
   @Factory((faker) => faker.name.findName())
+  @Prop()
+  tx_ref: string;
+
+  @Factory((faker) => faker.name.findName())
   @Prop({ required: true })
   senderFullName: string;
+
+  @Factory((faker) => faker.internet.email())
+  @Prop({ required: true })
+  email: string;
 
   @Factory((faker) => faker.phone.phoneNumber())
   @Prop({ required: true })

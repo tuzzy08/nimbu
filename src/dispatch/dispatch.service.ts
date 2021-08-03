@@ -20,25 +20,20 @@ export class DispatchService {
   async create(data: CreateDispatchDto): Promise<any> {
     const newDispatch = new this.dispatchModel(data);
     const result = await newDispatch.save();
-    this.eventEmitter.emit('dispatch.created', result);
-    if (result && result.paymentOption === 'card') {
-      const paymentData = {
-        amount: result.deliveryCharge,
-        payment_options: result.paymentOption,
-        customer: {
-          email: 't@t.com',
-          phoneNumber: result.senderPhone,
-          fullName: result.senderFullName,
-        },
-      };
-      // TODO: Add error checking here
-      const response = await this.paymentsService.makePayment(paymentData);
-      const {
-        data: { link },
-      } = response;
-      return link;
+    const payStackData = {
+      paymentOption: result.paymentOption,
+      email: result.email,
+      amount: result.deliveryCharge,
+    };
+    // this.eventEmitter.emit('dispatch.created', eventData);
+    if (result.paymentOption === 'payOnDelivery') {
+      return;
     }
-    // return await newDispatch.save();
+    try {
+      return this.paymentsService.payWithPaystack(payStackData);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   findAll() {

@@ -3,11 +3,11 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateDispatchDto {
   @IsNotEmpty()
   @IsString()
-  tx_ref;
+  senderFullName: string;
 
   @IsNotEmpty()
   @IsString()
-  senderFullName: string;
+  email: string;
 
   @IsNotEmpty()
   senderPhone: string;
@@ -32,6 +32,7 @@ export class CreateDispatchDto {
 
   @IsNotEmpty()
   receiverAddress: string;
+
   @IsNotEmpty()
   deliveryCharge: number;
 
