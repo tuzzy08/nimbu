@@ -21,16 +21,12 @@ import { ApiResponseFormat } from 'src/shared/api-response.dto';
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  @Get('verifyPaystackPayment')
+  @Post('verifyPaystackPayment')
   async verifyPaystackPayment(
-    @Query('reference') reference: string,
+    @Body('reference') reference: any,
   ): Promise<ApiResponseFormat> {
-    console.log('endpoint called');
-    console.log(reference);
     const res = await this.paymentsService.verifyPaystackPayment(reference);
-    console.log(res);
     return res;
-    // return await this.paymentsService.verifyPayment(transactionInfo);
   }
 
   @Post('payWithFlutterwave')
