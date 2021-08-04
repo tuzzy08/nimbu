@@ -35,6 +35,8 @@ export class PaymentsService {
     const transactionInfo = {
       currency: 'NGN',
       reference: `nimbu-${id}`,
+      callback_url: 'https://3676cb46cd26.ngrok.io/api/verifyPaystackPayment',
+      // callback_url: `http://ef1167a5b1e1.ngrok.io/api/v1/payments/verifyPaystackPayment`,
       channels: ['card', 'bank', 'ussd', 'qr', 'bank_transfer'],
       ...paymentInfo,
     };
@@ -51,7 +53,16 @@ export class PaymentsService {
     }
   }
 
-  async makePayment(paymentInfo: MakePaymentDto): Promise<any> {
+  async verifyPaystackPayment(reference: string): Promise<any> {
+    const url = `${process.env.PAYSTACK_API_BASE_URL}/transaction/verify/${reference}`;
+    // Send 'Get' request to paystack verify endpoint to verify transaction
+    const { data } = await firstValueFrom(
+      this.httpService.get(url, this.config),
+    );
+    return data;
+  }
+
+  async payWithFlutterwave(paymentInfo: MakePaymentDto): Promise<any> {
     const url = `${process.env.FLUTTER_API_BASE_URL}/v3/payments`;
     const { amount, tx_ref } = paymentInfo;
     const customerInfo = {
@@ -71,46 +82,6 @@ export class PaymentsService {
       this.httpService.post(url, customerInfo, this.config),
     );
     return data;
-  }
-
-  async verifyPayment(transactionInfo: VerifyPaymentDto) {
-    const url = `${process.env.FLUTTER_API_BASE_URL}/v3/transactions/${transactionInfo.tx_ref}/verify`;
-    // Get cached transaction amount
-    const cached_tx_amount = await this.cacheManager.get(
-      transactionInfo.tx_ref,
-    );
-    if (!cached_tx_amount) {
-      return { status: 'error', message: 'Invalid Transaction', data: null };
-    }
-    // Send 'Get' request to flutterwave verify endpoint to verify transaction
-    const { data } = await firstValueFrom(
-      this.httpService.get(url, this.config),
-    );
-    console.log(`Verification response`);
-    console.log(data);
-    if (data.status !== 'success') {
-      return { status: 'error', message: data.message, data: null };
-    }
-    // On succesful verification, destructure transaction parameters to confirm
-    const { tx_ref: response_tx_ref, response_amount, currency } = data.data;
-    // Check if any parameters don't match
-    if (
-      response_tx_ref !== transactionInfo.tx_ref ||
-      cached_tx_amount !== response_amount ||
-      currency !== 'NGN'
-    ) {
-      this.eventEmitter.emit('payment.made', {
-        tx_ref: response_tx_ref,
-        response_amount,
-        currency,
-      });
-      return {
-        status: 'error',
-        message: 'Invalid Transaction',
-        data: null,
-      };
-    }
-    return { status: 'success', message: 'Payment succesful', data: null };
   }
 
   create(createPaymentDto: CreatePaymentDto) {
