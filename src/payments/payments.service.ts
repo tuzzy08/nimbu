@@ -5,11 +5,9 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
 import { Cache } from 'cache-manager';
 import { InjectModel } from '@nestjs/mongoose';
-import { v4 as uuidv4 } from 'uuid';
 import { CreatePaymentDto } from './dtos/create-payment.dto';
 import { MakePaymentDto } from './dtos/make-payment.dto';
 import { UpdatePaymentDto } from './dtos/update-payment.dto';
-import { VerifyPaymentDto } from './dtos/verify-payments.dto';
 import { Payment, PaymentDocument } from './schemas/payment-schema';
 import { PayWithPaystackDto } from './dtos/pay-with-paystack.dto';
 
@@ -31,10 +29,8 @@ export class PaymentsService {
 
   async payWithPaystack(paymentInfo: PayWithPaystackDto): Promise<any> {
     const url = `${process.env.PAYSTACK_API_BASE_URL}/transaction/initialize`;
-    const id = uuidv4();
     const transactionInfo = {
       currency: 'NGN',
-      reference: `nimbu-${id}`,
       callback_url: 'https://3676cb46cd26.ngrok.io/api/verifyPaystackPayment',
       // callback_url: `http://ef1167a5b1e1.ngrok.io/api/v1/payments/verifyPaystackPayment`,
       channels: ['card', 'bank', 'ussd', 'qr', 'bank_transfer'],
@@ -45,7 +41,6 @@ export class PaymentsService {
         this.httpService.post(url, transactionInfo, this.config),
       );
       if (response) {
-        console.log(response.data);
         return response.data;
       }
     } catch (error) {
@@ -59,7 +54,9 @@ export class PaymentsService {
     const { data } = await firstValueFrom(
       this.httpService.get(url, this.config),
     );
-    return data;
+    if (data.status === true && data.data.status === 'success') {
+      this.eventEmitter.emit('payment.made', reference);
+    }
   }
 
   async payWithFlutterwave(paymentInfo: MakePaymentDto): Promise<any> {

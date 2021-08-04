@@ -6,6 +6,7 @@ import { CreateDispatchDto } from './dto/create-dispatch.dto';
 import { UpdateDispatchDto } from './dto/update-dispatch.dto';
 import { Dispatch, DispatchDocument } from './schema/dispatch.schema';
 import { PaymentsService } from 'src/payments/payments.service';
+import { v4 as uuidv4 } from 'uuid';
 import { DispatchCreatedEvent } from './events/dispatch-created.event';
 
 @Injectable()
@@ -17,20 +18,23 @@ export class DispatchService {
     private eventEmitter: EventEmitter2,
   ) {}
 
-  async create(data: CreateDispatchDto): Promise<any> {
-    const newDispatch = new this.dispatchModel(data);
+  async create(dispatch: CreateDispatchDto): Promise<any> {
+    const newDispatch = new this.dispatchModel(dispatch);
+    const id = uuidv4();
+    newDispatch.reference = `nimbu-${id}`;
     const result = await newDispatch.save();
-    const payStackData = {
+    const data = {
+      reference: result.reference,
       paymentOption: result.paymentOption,
       email: result.email,
       amount: result.deliveryCharge,
     };
-    this.eventEmitter.emit('dispatch.created', payStackData);
+    this.eventEmitter.emit('dispatch.created', data);
     if (result.paymentOption === 'payOnDelivery') {
       return;
     }
     try {
-      const response = await this.paymentsService.payWithPaystack(payStackData);
+      const response = await this.paymentsService.payWithPaystack(data);
       return response;
     } catch (error) {
       console.log(error);

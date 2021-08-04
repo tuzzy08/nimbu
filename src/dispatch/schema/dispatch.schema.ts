@@ -23,7 +23,7 @@ enum deliveryStatus {
 export class Dispatch {
   @Factory((faker) => faker.name.findName())
   @Prop()
-  tx_ref: string;
+  reference: string;
 
   @Factory((faker) => faker.name.findName())
   @Prop({ required: true })

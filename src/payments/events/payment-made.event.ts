@@ -1,1 +1,3 @@
-export class PaymentMadeEvent {}
+export class PaymentMadeEvent {
+  reference: string;
+}
