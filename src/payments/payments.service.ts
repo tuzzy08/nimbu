@@ -5,11 +5,9 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
 import { Cache } from 'cache-manager';
 import { InjectModel } from '@nestjs/mongoose';
-import { v4 as uuidv4 } from 'uuid';
 import { CreatePaymentDto } from './dtos/create-payment.dto';
 import { MakePaymentDto } from './dtos/make-payment.dto';
 import { UpdatePaymentDto } from './dtos/update-payment.dto';
-import { VerifyPaymentDto } from './dtos/verify-payments.dto';
 import { Payment, PaymentDocument } from './schemas/payment-schema';
 import { PayWithPaystackDto } from './dtos/pay-with-paystack.dto';
 

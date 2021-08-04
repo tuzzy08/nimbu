@@ -1,6 +1,5 @@
 import {
   Controller,
-  Query,
   Get,
   Post,
   Body,
@@ -14,7 +13,6 @@ import { PaymentsService } from './payments.service';
 import { CreatePaymentDto } from './dtos/create-payment.dto';
 import { UpdatePaymentDto } from './dtos/update-payment.dto';
 import { MakePaymentDto } from './dtos/make-payment.dto';
-import { VerifyPaymentDto } from './dtos/verify-payments.dto';
 import { ApiResponseFormat } from 'src/shared/api-response.dto';
 
 @Controller('/api/v1/payments')
@@ -25,8 +23,7 @@ export class PaymentsController {
   async verifyPaystackPayment(
     @Body('reference') reference: any,
   ): Promise<ApiResponseFormat> {
-    const res = await this.paymentsService.verifyPaystackPayment(reference);
-    return res;
+    return await this.paymentsService.verifyPaystackPayment(reference);
   }
 
   @Post('payWithFlutterwave')
