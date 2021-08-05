@@ -36,17 +36,6 @@ export class PaymentsController {
     return link;
   }
 
-  // @Post('verify')
-  // @UsePipes(ValidationPipe)
-  // async verifyFlutterwavePayment(
-  //   @Query() transactionInfo: VerifyPaymentDto,
-  // ): Promise<ApiResponseFormat> {
-  //   const res = await this.paymentsService.verifyFlutterwavePayment(transactionInfo);
-  //   console.log(res);
-  //   return res;
-  //   // return await this.paymentsService.verifyPayment(transactionInfo);
-  // }
-
   @Post()
   create(@Body() createPaymentDto: CreatePaymentDto) {
     return this.paymentsService.create(createPaymentDto);

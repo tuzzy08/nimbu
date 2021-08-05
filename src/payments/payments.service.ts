@@ -1,4 +1,4 @@
-import { Inject, Injectable, CACHE_MANAGER } from '@nestjs/common';
+import { Inject, Injectable, CACHE_MANAGER, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -19,6 +19,8 @@ export class PaymentsService {
       Authorization: `Bearer ${process.env.PAYSTACK_API_TEST_SECRET_KEY}`,
     },
   };
+
+  private readonly logger = new Logger(PaymentsService.name);
   constructor(
     @InjectModel(Payment.name)
     private readonly paymentModel: Model<PaymentDocument>,
@@ -44,7 +46,7 @@ export class PaymentsService {
         return response.data;
       }
     } catch (error) {
-      console.log(error);
+      this.logger.log(error);
     }
   }
 
