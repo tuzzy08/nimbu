@@ -31,7 +31,7 @@ export class PaymentsService {
     const url = `${process.env.PAYSTACK_API_BASE_URL}/transaction/initialize`;
     const transactionInfo = {
       currency: 'NGN',
-      callback_url: 'https://3676cb46cd26.ngrok.io/api/verifyPaystackPayment',
+      callback_url: 'https://fd9c6bee8d2c.ngrok.io/api/verifyPaystackPayment',
       // callback_url: `http://ef1167a5b1e1.ngrok.io/api/v1/payments/verifyPaystackPayment`,
       channels: ['card', 'bank', 'ussd', 'qr', 'bank_transfer'],
       ...paymentInfo,

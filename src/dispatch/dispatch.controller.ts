@@ -38,7 +38,7 @@ export class DispatchController {
     @Param('id') id: string,
     @Body() updateDispatchDto: UpdateDispatchDto,
   ) {
-    return this.dispatchService.update(+id, updateDispatchDto);
+    return this.dispatchService.update(id, updateDispatchDto);
   }
 
   @Delete(':id')
