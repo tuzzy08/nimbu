@@ -1,4 +1,4 @@
-import { Inject, Injectable, CACHE_MANAGER } from '@nestjs/common';
+import { Inject, Injectable, CACHE_MANAGER, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -19,6 +19,8 @@ export class PaymentsService {
       Authorization: `Bearer ${process.env.PAYSTACK_API_TEST_SECRET_KEY}`,
     },
   };
+
+  private readonly logger = new Logger(PaymentsService.name);
   constructor(
     @InjectModel(Payment.name)
     private readonly paymentModel: Model<PaymentDocument>,
@@ -31,7 +33,7 @@ export class PaymentsService {
     const url = `${process.env.PAYSTACK_API_BASE_URL}/transaction/initialize`;
     const transactionInfo = {
       currency: 'NGN',
-      callback_url: 'https://3676cb46cd26.ngrok.io/api/verifyPaystackPayment',
+      callback_url: 'https://29f22fdefbe0.ngrok.io/api/verifyPaystackPayment',
       // callback_url: `http://ef1167a5b1e1.ngrok.io/api/v1/payments/verifyPaystackPayment`,
       channels: ['card', 'bank', 'ussd', 'qr', 'bank_transfer'],
       ...paymentInfo,
@@ -44,7 +46,7 @@ export class PaymentsService {
         return response.data;
       }
     } catch (error) {
-      console.log(error);
+      this.logger.log(error);
     }
   }
 
@@ -55,7 +57,9 @@ export class PaymentsService {
       this.httpService.get(url, this.config),
     );
     if (data.status === true && data.data.status === 'success') {
+      const res = data.data;
       this.eventEmitter.emit('payment.made', reference);
+      return res;
     }
   }
 

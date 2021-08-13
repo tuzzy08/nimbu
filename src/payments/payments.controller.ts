@@ -23,7 +23,8 @@ export class PaymentsController {
   async verifyPaystackPayment(
     @Body('reference') reference: any,
   ): Promise<ApiResponseFormat> {
-    return await this.paymentsService.verifyPaystackPayment(reference);
+    const res = await this.paymentsService.verifyPaystackPayment(reference);
+    return res;
   }
 
   @Post('payWithFlutterwave')
@@ -35,17 +36,6 @@ export class PaymentsController {
     } = response;
     return link;
   }
-
-  // @Post('verify')
-  // @UsePipes(ValidationPipe)
-  // async verifyFlutterwavePayment(
-  //   @Query() transactionInfo: VerifyPaymentDto,
-  // ): Promise<ApiResponseFormat> {
-  //   const res = await this.paymentsService.verifyFlutterwavePayment(transactionInfo);
-  //   console.log(res);
-  //   return res;
-  //   // return await this.paymentsService.verifyPayment(transactionInfo);
-  // }
 
   @Post()
   create(@Body() createPaymentDto: CreatePaymentDto) {

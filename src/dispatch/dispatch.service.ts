@@ -7,7 +7,6 @@ import { UpdateDispatchDto } from './dto/update-dispatch.dto';
 import { Dispatch, DispatchDocument } from './schema/dispatch.schema';
 import { PaymentsService } from 'src/payments/payments.service';
 import { v4 as uuidv4 } from 'uuid';
-import { DispatchCreatedEvent } from './events/dispatch-created.event';
 
 @Injectable()
 export class DispatchService {
@@ -49,8 +48,8 @@ export class DispatchService {
     return `This action returns a #${id} dispatch`;
   }
 
-  update(id: number, updateDispatchDto: UpdateDispatchDto) {
-    return `This action updates a #${id} dispatch`;
+  async update(id: string, updateDispatchDto: any) {
+    return this.dispatchModel.find({ id }).exec();
   }
 
   remove(id: number) {

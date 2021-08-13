@@ -6,6 +6,7 @@ import { PaymentsService } from './payments.service';
 import { PaymentsController } from './payments.controller';
 import { Payment, PaymentSchema } from './schemas/payment-schema';
 import { PaymentMadeEventListener } from './listeners/payment-made.listener';
+import { Dispatch, DispatchSchema } from 'src/dispatch/schema/dispatch.schema';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PaymentMadeEventListener } from './listeners/payment-made.listener';
         name: Payment.name,
         schema: PaymentSchema,
       },
+      { name: Dispatch.name, schema: DispatchSchema },
     ]),
   ],
   controllers: [PaymentsController],
