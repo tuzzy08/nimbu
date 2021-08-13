@@ -23,7 +23,8 @@ export class PaymentsController {
   async verifyPaystackPayment(
     @Body('reference') reference: any,
   ): Promise<ApiResponseFormat> {
-    return await this.paymentsService.verifyPaystackPayment(reference);
+    const res = await this.paymentsService.verifyPaystackPayment(reference);
+    return res;
   }
 
   @Post('payWithFlutterwave')
